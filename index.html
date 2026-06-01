@@ -10,7 +10,6 @@
       margin: 5px 0;
       text-decoration: none;
       color: #0066cc;
-      cursor: pointer;
     }
     .grid {
       display: grid;
@@ -40,9 +39,17 @@
       repos.forEach(repo => {
         const link = document.createElement("a");
         link.textContent = repo.name;
-        link.onclick = () => loadGallery(repo.name);
+        // Link points back to this page with ?repo=repoName
+        link.href = `?repo=${repo.name}`;
         container.appendChild(link);
       });
+
+      // If URL has ?repo=..., auto-load that gallery
+      const params = new URLSearchParams(window.location.search);
+      const repoName = params.get("repo");
+      if (repoName) {
+        loadGallery(repoName);
+      }
     }
 
     async function loadGallery(repoName) {
